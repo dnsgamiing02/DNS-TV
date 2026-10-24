@@ -1,0 +1,8 @@
+version: 4.4.0
+files:
+  - url: dns-tv-windows-4.4.0-setup.exe
+    sha512: E0ba0f7hQcGcYNs9eWZahJn6wvfU6K9C1Nb2yqM8WgciQHle4WDOIxqVUmF16mq1B8SuF3CmxnJ9b+kFTVu0RA==
+    size: 139632334
+path: dns-tv-windows-4.4.0-setup.exe
+sha512: E0ba0f7hQcGcYNs9eWZahJn6wvfU6K9C1Nb2yqM8WgciQHle4WDOIxqVUmF16mq1B8SuF3CmxnJ9b+kFTVu0RA==
+releaseDate: '2026-10-24T15:53:49.470Z'

@@ -1,0 +1,25 @@
+name: Publier une version
+# Recolle les fichiers déposés en morceaux sur la branche « publication » et crée la page de version.
+on:
+  workflow_dispatch:
+  push:
+    branches: [publication]
+permissions:
+  contents: write
+jobs:
+  publier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: publication }
+      - name: Recoller et vérifier
+        run: |
+          mkdir out
+          for p in parts/*.part00; do f=$(basename "$p" .part00); cat parts/"$f".part* > out/"$f"; done
+          (cd out && sha256sum -c ../parts/SHA256SUMS)
+          echo "V=v$(node -p "require('./dns-tv-version.json').version")" >> "$GITHUB_ENV"
+      - name: Page de version
+        env: { GH_TOKEN: '${{ github.token }}' }
+        run: |
+          gh release view "$V" -R "$GITHUB_REPOSITORY" >/dev/null 2>&1 && gh release upload "$V" out/* --clobber -R "$GITHUB_REPOSITORY" && gh release edit "$V" -F NOTES.md -R "$GITHUB_REPOSITORY" \
+            || { if [[ "$V" == *-* ]]; then F="--prerelease"; else F="--latest"; fi; gh release create "$V" out/* -R "$GITHUB_REPOSITORY" --target main -t "DNS TV ${V#v}" -F NOTES.md $F; }
